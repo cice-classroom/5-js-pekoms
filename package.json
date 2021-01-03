@@ -1,0 +1,27 @@
+{
+  "name": "tictactoe",
+  "version": "1.0.0",
+  "description": "tictactoe game",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "format": "prettier --write .",
+    "lint": "prettier --check ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cice-classroom/5-js-pekoms.git"
+  },
+  "author": "Alejandro Pineda",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cice-classroom/5-js-pekoms/issues"
+  },
+  "homepage": "https://github.com/cice-classroom/5-js-pekoms#readme",
+  "dependencies": {
+    "snowpack": "^2.18.5"
+  },
+  "devDependencies": {
+    "prettier": "2.2.1"
+  }
+}
