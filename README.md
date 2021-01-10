@@ -13,46 +13,46 @@ The game must be build using [LitElement](https://lit-element.polymer-project.or
 ## Example test
 
 ```typescript
-import { Engine } from "./engine";
+import { Engine } from './engine'
 
-describe("Engine", () => {
-  it("should start with an empty board", () => {
-    const engine = new Engine();
+describe('Engine', () => {
+    it('should start with an empty board', () => {
+        const engine = new Engine()
 
-    const actual = engine.board;
+        const actual = engine.board
 
-    expect(actual).toEqual([
-      [null, null, null],
-      [null, null, null],
-      [null, null, null],
-    ]);
-  });
+        expect(actual).toEqual([
+            [null, null, null],
+            [null, null, null],
+            [null, null, null],
+        ])
+    })
 
-  it("should set a value in the board when a player plays", () => {
-    const engine = new Engine();
+    it('should set a value in the board when a player plays', () => {
+        const engine = new Engine()
 
-    engine.play(1, 2);
-    const actual = engine.board;
+        engine.play(1, 2)
+        const actual = engine.board
 
-    expect(actual).toEqual([
-      [null, null, null],
-      ["O", null, null],
-      [null, null, null],
-    ]);
-  });
+        expect(actual).toEqual([
+            [null, null, null],
+            ['O', null, null],
+            [null, null, null],
+        ])
+    })
 
-  it("should alternate players", () => {
-    const engine = new Engine();
+    it('should alternate players', () => {
+        const engine = new Engine()
 
-    engine.play(1, 2);
-    engine.play(1, 1);
-    const actual = engine.board;
+        engine.play(1, 2)
+        engine.play(1, 1)
+        const actual = engine.board
 
-    expect(actual).toEqual([
-      [null, null, null],
-      ["O", null, null],
-      ["X", null, null],
-    ]);
-  });
-});
+        expect(actual).toEqual([
+            [null, null, null],
+            ['O', null, null],
+            ['X', null, null],
+        ])
+    })
+})
 ```
