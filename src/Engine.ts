@@ -5,13 +5,15 @@ export class Engine extends LitElement {
   currentPlayer:string
   casilla:Array<number>
   casillaValue:Array<string>
+  gameOver:boolean;
 
 
   constructor() {
     super();
     this.currentPlayer = 'X';
     this.casilla = [0,1,2,3,4,5,6,7,8];
-    this.casillaValue = ['','','','','','','','','',]; 
+    this.casillaValue = ['','','','','','','','','',];
+    this.gameOver=false;
   }
 
   static get styles() {
@@ -59,8 +61,8 @@ export class Engine extends LitElement {
       <div class="gameDisplay">
         <h2>TIC TAC TOE GAME</h2>
         <div id="subTitle">
-          <h2 id="player1">Player X:${this.currentPlayer}</h2>
-          <h2 id="player2">Player O:</h2>
+          <h2 id="player">Current Player:${this.currentPlayer}</h2>
+          <h2 id="winner">No winner yet</h2>
         </div>
 
         <div class="gameBoard">
@@ -74,7 +76,7 @@ export class Engine extends LitElement {
             <button id="${this.casilla[6]}" class="box" @click="${()=>this.markBox(this.casilla[6])}">${this.casillaValue[6]}</button>
             <button id="${this.casilla[7]}" class="box" @click="${()=>this.markBox(this.casilla[7])}">${this.casillaValue[7]}</button>
             <button id="${this.casilla[8]}" class="box" @click="${()=>this.markBox(this.casilla[8])}">${this.casillaValue[8]}</button>
-            <button id="reset" class="box">Reset</button>
+            <button id="reset" class="box" @click="${()=>this.reset()}">Reset</button>
           </div>
         </div>
       </div>
@@ -83,7 +85,8 @@ export class Engine extends LitElement {
 
   markBox(value:number) {
     try {
-      const aux =this.shadowRoot!.getElementById(this.casilla[value].toString())!
+      if(this.gameOver==false){
+        const aux =this.shadowRoot!.getElementById(this.casilla[value].toString())!
       switch(value)
       {
         case 0:aux.innerHTML=this.currentPlayer;
@@ -117,52 +120,79 @@ export class Engine extends LitElement {
       
       this.checkWinner(value);
       this.changeCurrentPlayer(this.currentPlayer);
+      }
+      
     } catch (error) {
       console.log(error.toString());
     }
    
   }
 
+  reset()
+  {
+    const player =this.shadowRoot!.getElementById("player")!
+    const winner =this.shadowRoot!.getElementById("winner")!
+
+    for (let i in this.casillaValue)
+    {
+        this.casillaValue[i]='';
+        let aux =this.shadowRoot!.getElementById(this.casilla[i].toString())!
+        aux.innerHTML="";
+    }
+    player.innerHTML="Current Player: X";
+    winner.innerHTML="";
+    this.currentPlayer="X";
+    this.gameOver=false;
+  }
+
   changeCurrentPlayer(value:string)
   {
+    const player =this.shadowRoot!.getElementById("player")!
     if(value=="X")
     {
       this.currentPlayer="Y"
+      
     }
     else{
       this.currentPlayer="X"
     }
+    player.innerHTML="Current Player: "+this.currentPlayer;
   }
 
-  checkWinner(value:number)
+  checkWinner (value:number)
   {
+    const player =this.shadowRoot!.getElementById("winner")!
     switch(value)
     {
       case 0: if((this.casillaValue[0]==this.currentPlayer && this.casillaValue[1]==this.currentPlayer && this.casillaValue[2]==this.currentPlayer)
                  || (this.casillaValue[0]==this.currentPlayer && this.casillaValue[3]==this.currentPlayer && this.casillaValue[6]==this.currentPlayer)
                  || (this.casillaValue[0]==this.currentPlayer && this.casillaValue[4]==this.currentPlayer && this.casillaValue[8]==this.currentPlayer))
                  {
-                  console.log("Player "+ this.currentPlayer + " Won");
+                  player.innerHTML="Player "+ this.currentPlayer + " Won";
+                  this.gameOver=true;
                  }
 
         break;
       case 1: if((this.casillaValue[0]==this.currentPlayer && this.casillaValue[1]==this.currentPlayer && this.casillaValue[2]==this.currentPlayer)
                 || (this.casillaValue[1]==this.currentPlayer && this.casillaValue[4]==this.currentPlayer && this.casillaValue[7]==this.currentPlayer))
                 {
-                console.log("Player "+ this.currentPlayer + " Won");
+                  player.innerHTML="Player "+ this.currentPlayer + " Won";
+                  this.gameOver=true;
                 }
         break;
       case 2: if((this.casillaValue[0]==this.currentPlayer && this.casillaValue[1]==this.currentPlayer && this.casillaValue[2]==this.currentPlayer)
                 || (this.casillaValue[2]==this.currentPlayer && this.casillaValue[5]==this.currentPlayer && this.casillaValue[8]==this.currentPlayer)
                 || (this.casillaValue[2]==this.currentPlayer && this.casillaValue[4]==this.currentPlayer && this.casillaValue[6]==this.currentPlayer))
                 {
-                  console.log("Player "+ this.currentPlayer + " Won");
+                  player.innerHTML="Player "+ this.currentPlayer + " Won";
+                  this.gameOver=true;
                 }
         break;
       case 3: if((this.casillaValue[0]==this.currentPlayer && this.casillaValue[3]==this.currentPlayer && this.casillaValue[6]==this.currentPlayer)
               || (this.casillaValue[3]==this.currentPlayer && this.casillaValue[4]==this.currentPlayer && this.casillaValue[5]==this.currentPlayer))
               {
-                console.log("Player "+ this.currentPlayer + " Won");
+                player.innerHTML="Player "+ this.currentPlayer + " Won";
+                this.gameOver=true;
               }
         break;
       case 4: if((this.casillaValue[4]==this.currentPlayer && this.casillaValue[1]==this.currentPlayer && this.casillaValue[7]==this.currentPlayer)
@@ -170,36 +200,42 @@ export class Engine extends LitElement {
               || (this.casillaValue[4]==this.currentPlayer && this.casillaValue[0]==this.currentPlayer && this.casillaValue[8]==this.currentPlayer)
               || (this.casillaValue[4]==this.currentPlayer && this.casillaValue[2]==this.currentPlayer && this.casillaValue[6]==this.currentPlayer))
               {
-                console.log("Player "+ this.currentPlayer + " Won");
+                player.innerHTML="Player "+ this.currentPlayer + " Won";
+                this.gameOver=true;
               }
         break;
       case 5: if((this.casillaValue[5]==this.currentPlayer && this.casillaValue[2]==this.currentPlayer && this.casillaValue[8]==this.currentPlayer)
                 || (this.casillaValue[5]==this.currentPlayer && this.casillaValue[4]==this.currentPlayer && this.casillaValue[3]==this.currentPlayer)
                 )
                 {
-                  console.log("Player "+ this.currentPlayer + " Won");
+                  player.innerHTML="Player "+ this.currentPlayer + " Won";
+                  this.gameOver=true;
                 }
         break;
       case 6: if((this.casillaValue[6]==this.currentPlayer && this.casillaValue[3]==this.currentPlayer && this.casillaValue[0]==this.currentPlayer)
                 || (this.casillaValue[6]==this.currentPlayer && this.casillaValue[7]==this.currentPlayer && this.casillaValue[8]==this.currentPlayer)
                 || (this.casillaValue[4]==this.currentPlayer && this.casillaValue[2]==this.currentPlayer && this.casillaValue[6]==this.currentPlayer))
                 {
-                  console.log("Player "+ this.currentPlayer + " Won");
+                  player.innerHTML="Player "+ this.currentPlayer + " Won";
+                  this.gameOver=true;
                 }
         break;
       case 7: if((this.casillaValue[7]==this.currentPlayer && this.casillaValue[4]==this.currentPlayer && this.casillaValue[1]==this.currentPlayer)
                 || (this.casillaValue[6]==this.currentPlayer && this.casillaValue[7]==this.currentPlayer && this.casillaValue[8]==this.currentPlayer))
                 {
-                  console.log("Player "+ this.currentPlayer + " Won");
+                  player.innerHTML="Player "+ this.currentPlayer + " Won";
+                  this.gameOver=true;
                 }
           break;
       case 8: if((this.casillaValue[8]==this.currentPlayer && this.casillaValue[5]==this.currentPlayer && this.casillaValue[2]==this.currentPlayer)
                 || (this.casillaValue[8]==this.currentPlayer && this.casillaValue[4]==this.currentPlayer && this.casillaValue[0]==this.currentPlayer)
                 || (this.casillaValue[8]==this.currentPlayer && this.casillaValue[7]==this.currentPlayer && this.casillaValue[6]==this.currentPlayer))
                 {
-                  console.log("Player "+ this.currentPlayer + " Won");
+                  player.innerHTML="Player "+ this.currentPlayer + " Won";
+                  this.gameOver=true;
                 }
           break;
     }
+
   }
 }
